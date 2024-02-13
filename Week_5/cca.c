@@ -1,57 +1,45 @@
-#include <stdio.h>  
-#include <stdlib.h>  
-  
-struct node {  
-  int data;  
-  struct node *right_child;  
-  struct node *left_child;  
-};  
-  
-struct node* new_node(int x){  
-  struct node *temp;  
-  temp = malloc(sizeof(struct node));  
-  temp->data = x;  
-  temp->left_child = NULL;  
-  temp->right_child = NULL;  
-  
-  return temp;  
-}  
-  
-struct node* insert(struct node * root, int x){  
-  if (root == NULL)  
-    return new_node(x);  
-  else if (x > root->data)  
-    root->right_child = insert(root->right_child, x);  
-  else   
-    root -> left_child = insert(root->left_child, x);  
-  return root;  
-}  
+#include <stdio.h>
+#include <stdlib.h>
 
-  
-void inorder(struct node *root){  
-  if (root != NULL)   
-  {  
-    inorder(root->left_child);   
-    printf(" %d ", root->data);   
-    inorder(root->right_child);   
-  }  
-}  
-  
-int main() {  
-  struct node *root;  
-  root = new_node(20);  
-  insert(root, 5);  
-  insert(root, 1);  
-  insert(root, 15);  
-  insert(root, 9);  
-  insert(root, 7);  
-  insert(root, 12);  
-  insert(root, 30);  
-  insert(root, 25);  
-  insert(root, 40);  
-  insert(root, 45);  
-  insert(root, 42);  
-  
-  inorder(root);  
-  printf("\n");
-}  
+struct TreeNode {
+    int data;
+    struct TreeNode* left;
+    struct TreeNode* right;
+};
+
+// Function to create a new tree node
+struct TreeNode* newNode(int data) {
+    struct TreeNode* node = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
+}
+
+// Function to find the Closest Common Ancestor (CCA)
+struct TreeNode* findCCA(struct TreeNode* root, int n1, int n2) {
+    if (root == NULL)
+        return NULL;
+    if (root->data > n1 && root->data > n2)
+        return findCCA(root->left, n1, n2);
+    if (root->data < n1 && root->data < n2)
+        return findCCA(root->right, n1, n2);
+    return root;
+}
+
+int main() {
+    // Constructing the BST
+    struct TreeNode* root = newNode(20);
+    root->left = newNode(8);
+    root->right = newNode(22);
+    root->left->left = newNode(4);
+    root->left->right = newNode(12);
+    root->left->right->left = newNode(10);
+    root->left->right->right = newNode(14);
+
+    int n1 = 10, n2 = 14;
+    struct TreeNode* cca = findCCA(root, n1, n2);
+    printf("Closest Common Ancestor of %d and %d is: %d\n", n1, n2, cca->data);
+
+    return 0;
+}
