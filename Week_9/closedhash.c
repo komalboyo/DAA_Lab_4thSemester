@@ -1,52 +1,40 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define size 11
+#define nan -9999
 int count;
 
-struct node{
-  int data;
-  struct node *next;
-};
-
-struct node *chain[size];
+int arr[size];
 
 void init(){
-  int i;
   count=0;
-  for(i = 0; i < size; i++)
-    chain[i] = NULL;
+  for(int i = 0; i < size; i++)
+    arr[i] = nan;
 }
 
 void insert(int value){
-  struct node *newNode = malloc(sizeof(struct node));
-  newNode->data = value;
-  newNode->next = NULL;
   int key = value % size;
-    
-  if(chain[key] == NULL){
-    chain[key] = newNode;
+  if(arr[key] == nan){
+    arr[key] = value;
     count++;
   }
     
   else{
-    struct node *temp = chain[key];
-    while(chain[key]!=NULL){
+    while(arr[key]!=nan){
       key++;
       count++;
       key=key%size;
     }
-    chain[key]= newNode;
+    arr[key]= value;
     count++;
   }
 }
 
 void print(){
-  int i;
-  for(i = 0; i < size; i++){
-    struct node *temp = chain[i]; 
-    printf("chain[%d]-->",i);
-    if (temp) printf("%d\n",chain[i]->data);
-    else printf("NULL\n");
+  for(int i = 0; i < size; i++){
+    printf("A[%d]-->",i);
+    if (arr[i]!=nan) printf("%d\n",arr[i]);
+    else printf("nan\n");
   }
   printf("The count: %d\n", count);
 }
